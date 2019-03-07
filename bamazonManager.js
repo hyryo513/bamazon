@@ -115,7 +115,8 @@ function addProduct(){
                     department_name: response.department,
                     product_name: response.productName,
                     price: response.productPrice,
-                    stock_quantity: response.productStock     
+                    stock_quantity: response.productStock,
+                    product_sales: 0     
                 }
             ).then(function(){
                 console.log("New product is added!");
