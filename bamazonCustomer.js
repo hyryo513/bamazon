@@ -9,10 +9,16 @@ var knex = require('knex')({
     }
   });
 
+var productIDArray = [];
+
 var cTable = require('console.table');
 
 function showInventory(){
+  productIDArray = [];
   knex.select('*').from('products').then(function(rows){
+    rows.forEach(element => {
+      productIDArray.push(element.id);
+    });
     var table = cTable.getTable(rows);
     console.log(table);
     mainFunction();   
@@ -46,12 +52,14 @@ function purchaseFunction(){
         {
           type: "input",
           name: "productID",
-          message: "Please enter the product ID you would like to purchase"
+          message: "Please enter the product ID you would like to purchase",
+          validate: validateProductID
         },
         {
           type: "input",
           name: "quantity",
-          message: "How many do you want?"
+          message: "How many do you want?",
+          validate: validateQuantity
         }
       ]
     ).then(function(response){
@@ -82,6 +90,24 @@ function purchase(productID, newQuantity, totalCost, newProductSales){
   }).catch(function(error){
     console.error(error)
   });
+};
+
+function validateProductID(productID){
+  if(productIDArray.indexOf(parseInt(productID)) >= 0){
+    return true;
+  }
+  else{
+    return "Product ID doesn't exist!"
+  }
+};
+
+function validateQuantity(quantity){
+  if (parseInt(quantity) >= 0) {
+    return true;
+  }
+  else{
+    return "Please enter valid quantity number!"
+  }
 };
 
 showInventory();
